@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.target=GUI
+comment0.text=\n\ GUI\ und\ Spielsimulation\ in\ einem\n\ \n\ @author\ Toni\ \n\ @version\ 0.5/20.3.22\n
+comment1.params=args
+comment1.target=void\ main(java.lang.String[])
+comment1.text=\n\ Main\n
+comment2.params=
+comment2.target=void\ createGUI()
+comment2.text=\n\ Erstellt\ die\ GUI\n\ Panels\:\n\ Panel\n\ topPanel\n\ sidePanel\n
+comment3.params=
+comment3.target=void\ starteSpiel()
+comment4.params=e
+comment4.target=void\ actionPerformed(java.awt.event.ActionEvent)
+comment5.params=newText
+comment5.target=void\ addText(java.lang.String)
+comment6.params=
+comment6.target=void\ deleteText()
+comment7.params=
+comment7.target=void\ newLine()
+numComments=8
