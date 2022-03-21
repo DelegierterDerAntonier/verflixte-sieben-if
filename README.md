@@ -2,4 +2,4 @@
 Informatik Projekt
 
 
-bitte neue Wuerfel Klasse entnehmen
+bitte neue Wuerfel Klasse entnehmen Version 1.1
