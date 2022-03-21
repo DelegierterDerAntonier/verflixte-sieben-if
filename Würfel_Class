@@ -17,15 +17,17 @@ public class Wuerfel
      */
     public Wuerfel()
     {
-        zufallsZahl= new Random();
+        zufallsZahl = new Random();
     }
 
     public void testen()
     {
-         System.out.println(punkte);
+        zufallsZahlAusgeben();
+        System.out.println(punkte);
     }
     
     /**
+     * 
      * Methode, um Punkte anzugeben
      */
     public int punkteZahlAngeben()
@@ -36,12 +38,11 @@ public class Wuerfel
     /**
      * Methode zur Ausgabe einer Zufälligen Zahl zwischen 1 und 6
      */
-    public int zufallsZahlAusgaben()
+    public int zufallsZahlAusgeben()
     {
         //erstellt eine Zufällige Zahl zwischen 1 und 6//
         int pMaximum = 6;
-        Random zufallsAugenAnzahl = new Random();
-        punkte = zufallsAugenAnzahl.nextInt(pMaximum)+1; // zufalls Zahl + 1, da man von 0 anfängt zu zählen
+        punkte = 1 + zufallsZahl.nextInt(pMaximum);// zufalls Zahl + 1, da man von 0 anfängt zu zählen
         return punkte; 
     }
 
@@ -50,7 +51,7 @@ public class Wuerfel
      */
     public void rollen()
     {
-        zufallsZahlAusgaben();
+        zufallsZahlAusgeben();
     }
     
 }
