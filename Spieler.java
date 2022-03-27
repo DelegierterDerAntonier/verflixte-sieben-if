@@ -3,7 +3,7 @@ import java.util.Arrays;
 /**
 Klasse Spieler beeinhaltet die Methoden, die ein Spieler im Spiel "Verflixte 7 haben würde.
 * @author (KingKong)
-* @version (0_5) Zuletzt bearbeitet am 21.3.2022
+* @version (0_5) Zuletzt bearbeitet am 27.3.2022
 */
 public class Spieler
 {
@@ -17,6 +17,7 @@ public class Spieler
   private Topf topf;
   private Wuerfel wuerfel1,wuerfel2;
   private boolean darfWuerfeln;
+  private int durchgangsSiege;
 
 
   /**
@@ -31,6 +32,7 @@ public class Spieler
     wurfAnzahl = 0;
     darfWuerfeln = true;
     vermoegen = 10;
+    durchgangsSiege = 0;
   }
   
   /**
@@ -46,8 +48,13 @@ public class Spieler
   */
   public int punktestandAngeben()
   {
-
-  return punkte;
+    
+    return punkte;
+  }
+  
+  public void punkteZuruecksetzen()
+  {
+      punkte = 0;
   }
 
   /**
@@ -118,7 +125,7 @@ public class Spieler
         
         if (augensumme != 7)
         {
-            punkte = wuerfel1.punkteZahlAngeben() + augensumme + wuerfel2.punkteZahlAngeben();
+            punkte += augensumme;
             int[] ergebnis = {augensumme, wurfAnzahl, punkte};
             return ergebnis;
         }
@@ -141,5 +148,15 @@ public class Spieler
   public void setVermoegen(int pV)
   {
       vermoegen = pV;
+  }
+  
+  public int getSiege()
+  {
+      return durchgangsSiege;
+  }
+  
+  public void setSiege(int pSiege)
+  {
+      durchgangsSiege = pSiege;
   }
 }

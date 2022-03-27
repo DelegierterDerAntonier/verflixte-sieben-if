@@ -32,4 +32,9 @@ public class Topf
         return einsatz ;
     }
     
+    public void leeren()
+    {
+        einsatz = 0;
+    }
+    
 }

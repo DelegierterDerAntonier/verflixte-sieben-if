@@ -10,13 +10,13 @@ import java.io.File;
  * GUI und Spielsimulation in einem
  * 
  * @author Toni 
- * @version 0.6/26.3.22 
+ * @version 1.0/27.3.22 
  */
 public class GUI extends JFrame implements ActionListener{
     private JTextArea konsole, spieler, vermoegen, topf, wuerfelausgabe;
     private JButton zugBeenden, abbruch, wuerfeln;
     private Spieler spieler1, spieler2;
-    private JOptionPane frame, frame2, einsatzFrame;
+    private JOptionPane frame, frame2, einsatzFrame, sieg;
     private String spielername1, spielername2;
     private boolean werIstDran; //true = Spieler 1, false = Spieler 2
     private Topf spieltopf;
@@ -146,6 +146,10 @@ public class GUI extends JFrame implements ActionListener{
       meinJFrame.setVisible(true);
       }
       
+    /**
+     * Startet das Spiel.
+     * Fragt Spielernamen ab und gibt Spieler 1 den ersten Zug
+     */
     public void starteSpiel()
     {
         spieltopf = new Topf();
@@ -185,6 +189,11 @@ public class GUI extends JFrame implements ActionListener{
         SpielzugSpieler1();
     }
     
+    /**
+     * Ein Spielzug von Spieler 1.
+     * Ändert Angaben von Spielername, Vermögen und Topf.
+     * Holt den Einsatz
+     */
     public void SpielzugSpieler1()
     {
         newLine();
@@ -192,41 +201,55 @@ public class GUI extends JFrame implements ActionListener{
         addText(", du bist dran!");
         spieler.setText(spielername1);
         vermoegen.setText("Vermoegen:" + "\n" + spieler1.getVermoegen());
+        topf.setText("Topf:" + "\n" + spieltopf.einsatzAbgeben());
         einsatzHolen();
         vermoegen.setText("Vermoegen:" + "\n" + spieler1.getVermoegen());
         newLine();
         addText("Jetzt kannst du würfeln (auf die Würfel drücken)");
     }
     
+    /**
+     * Ein Spielzug von Spieler 2.
+     * Ändert Angaben von Spielername, Vermögen und Topf.
+     */
     public void SpielzugSpieler2()
     {
+        hatGewonnen();
         newLine();
         addText(spielername2);
         addText(", du bist dran!");
         spieler.setText(spielername2);
         vermoegen.setText("Vermoegen:" + "\n" + spieler2.getVermoegen());
-        einsatzHolen();
-        vermoegen.setText("Vermoegen:" + "\n" + spieler2.getVermoegen());
+        topf.setText("Topf:" + "\n" + spieltopf.einsatzAbgeben());
         newLine();
-        addText("Jetzt kannst du würfeln (auf die Würfel drücken)");
+        addText("Du kannst jetzt würfeln (auf die Würfel drücken)");
     }
     
-      public void actionPerformed(ActionEvent e){
+     /**
+     * Was passiert, wenn die Buttons gedrückt werden.
+     * Zug beenden: Der Zug wird beendet und der andere Spieler ist dran.
+     * Beenden: Das Spiel wird beendet.
+     * Würfeln: Der Spieler würfelt, das Ergebnis wird ausgegeben.
+     */ 
+    public void actionPerformed(ActionEvent e){
            
         if(e.getSource() == this.zugBeenden){
             if(werIstDran)
             {
                 werIstDran = false;
-                
                 SpielzugSpieler2();
             }
             else
             {
-                werIstDran = true;
-                SpielzugSpieler1();
+                hatGewonnen();
             }
         }
         else if (e.getSource() == this.abbruch){
+            String ende = spielername1 + " hat " + spieler1.getSiege() + " Durchgänge gewonnen. " + spielername2 + " hat " + spieler2.getSiege() + " Durchgänge gewonnen.";
+            JOptionPane.showMessageDialog(sieg,
+            ende,
+            "Ende",
+            JOptionPane.INFORMATION_MESSAGE);
             System.exit(0);
         }
         else if (e.getSource() == this.wuerfeln){
@@ -235,16 +258,17 @@ public class GUI extends JFrame implements ActionListener{
                 newLine();
                 int[] ergebnisse = spieler1.wuerfeln();  // augensumme, wurfanzahl, punkte
                 wuerfelausgabe.setText("Wuerfelausgabe: \n " + ergebnisse[0]);
-                spieler1.setVermoegen(spieler1.getVermoegen() + ergebnisse[2]);
                 if(ergebnisse[0] != 7)
                 {
-                    addText("Du hast die " + ergebnisse[0] +" gewürfelt. Dein aktueller Punktestand liegt bei " + spieler1.getVermoegen() + ". Dafür hast du " + ergebnisse[1] + 
+                    addText("Du hast die " + ergebnisse[0] +" gewürfelt. Dein aktueller Punktestand liegt bei " + ergebnisse[2] + ". Dafür hast du " + ergebnisse[1] + 
                     " Würfe gebraucht.Du kannst den Zug beenden oder nochmal würfeln.");
                 }
                 else
                 {
-                    addText("Du hast eine 7 gewürfelt! Dein Punktestand liegt bei " + spieler1.getVermoegen() + ". Dein Zug ist beendet.");
+                    addText("Du hast eine 7 gewürfelt! Dein Punktestand liegt bei " + ergebnisse[2] + ". Dein Zug ist beendet.");
                     werIstDran = false;
+                    
+                    spieltopf.leeren();
                     SpielzugSpieler2();
                 }
             }
@@ -253,23 +277,28 @@ public class GUI extends JFrame implements ActionListener{
                 newLine();
                 int[] ergebnisse = spieler2.wuerfeln();  // augensumme, wurfanzahl, punkte
                 wuerfelausgabe.setText("Wuerfelausgabe: \n " + ergebnisse[0]);
-                spieler2.setVermoegen(spieler2.getVermoegen() + ergebnisse[2]);
                 if(ergebnisse[0] != 7)
                 {
-                    addText("Du hast die " + ergebnisse[0] +" gewürfelt. Dein aktueller Punktestand liegt bei " + spieler2.getVermoegen() + ". Dafür hast du " + ergebnisse[1] + 
+                    addText("Du hast die " + ergebnisse[0] +" gewürfelt. Dein aktueller Punktestand liegt bei " + ergebnisse[2] + ". Dafür hast du " + ergebnisse[1] + 
                     " Würfe gebraucht.Du kannst den Zug beenden oder nochmal würfeln.");
+                    hatGewonnen();
                 }
                 else
                 {
-                    addText("Du hast eine 7 gewürfelt! Dein Punktestand liegt bei " + spieler2.getVermoegen() + ". Dein Zug ist beendet.");
+                    addText("Du hast eine 7 gewürfelt! Dein Punktestand liegt bei " + ergebnisse[2] + ". Dein Zug ist beendet.");
                     werIstDran = true;
-                    SpielzugSpieler1();
+                    
+                    spieltopf.leeren();
+                    hatGewonnen();
                 }
             }
         }
             
     }
     
+    /**
+     * Fragt den Spieler, wie viel er setzen möchte und gibt den Einsatz von beiden Spielern in den Topf
+     */
     public void einsatzHolen()
     {
         String einsatz = (String)JOptionPane.showInputDialog(
@@ -287,15 +316,61 @@ public class GUI extends JFrame implements ActionListener{
         topf.setText("Topf:" + "\n" + spieltopf.einsatzAbgeben());
     }
     
+    /**
+     * Checkt, ob jemand gewonnen hat. Falls ja wird das ausgegeben und Punkte und Wurfanzahlen werden resettet für den nächsten Durchgang
+     */
+    public void hatGewonnen()
+    {
+        if(spieler2.punktestandAngeben() > spieler1.punktestandAngeben())
+        {
+            spieler2.topfLeeren();
+            String siegesnachricht = spielername2 + " hat gewonnen! Mit " + spieler2.punktestandAngeben() + " Punkten und einem Vermögen von " + spieler2.getVermoegen() + ". Würfe: " + spieler2.wurfAnzahlAngeben();
+            JOptionPane.showMessageDialog(sieg,
+            siegesnachricht,
+            "Sieg",
+            JOptionPane.INFORMATION_MESSAGE);
+            spieler1.resetWurfAnzahl();
+            spieler2.resetWurfAnzahl();
+            spieler1.punkteZuruecksetzen();
+            spieler2.punkteZuruecksetzen();
+            spieler2.setSiege(spieler2.getSiege() + 1);
+            SpielzugSpieler1();
+        }
+        else if((spieler1.punktestandAngeben() >= spieler2.punktestandAngeben()) && (spieler1.wurfAnzahlAngeben() == spieler2.wurfAnzahlAngeben()))
+        {
+            spieler1.topfLeeren();
+            String siegesnachricht = spielername1 + " hat gewonnen! Mit " + spieler1.punktestandAngeben() + " Punkten und einem Vermögen von " + spieler1.getVermoegen() + ". Würfe: " + spieler1.wurfAnzahlAngeben();
+            JOptionPane.showMessageDialog(sieg,
+            siegesnachricht,
+            "Sieg",
+            JOptionPane.INFORMATION_MESSAGE);
+            spieler1.resetWurfAnzahl();
+            spieler2.resetWurfAnzahl();
+            spieler1.punkteZuruecksetzen();
+            spieler2.punkteZuruecksetzen();
+            spieler1.setSiege(spieler1.getSiege() + 1);
+            SpielzugSpieler1();
+        }
+    }
+    
+    /**
+     * Fügt der Konsole Text hinzu
+     */
     public void addText(String newText) {
       konsole.append(newText);
     }
     
+    /**
+     * Löscht allen Text in der Konsole
+     */
      public void deleteText() {
       konsole.selectAll();
       konsole.cut();
     }
     
+    /**
+     * Fügt der Konsole eine neue Zeile hinzu
+     */
      public void newLine() {
       konsole.append("\n");
     }
