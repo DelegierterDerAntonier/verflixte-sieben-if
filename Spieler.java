@@ -131,7 +131,7 @@ public class Spieler
         }
         else
         {
-            punkte = punktestandAngeben() - augensumme;
+            punkte -= augensumme;
             darfWuerfeln = false;
             int[] ergebnis = {augensumme, wurfAnzahl, punkte};
             return ergebnis;
@@ -140,21 +140,34 @@ public class Spieler
     return lol;
   }
   
+  
+  /**
+  * Auf das aktuelle Vermögen wird zugegriffen
+  */
   public int getVermoegen()
   {
       return vermoegen;
   }
   
+  /**
+  * Das Vermögen wird unter einem Parameter gespeichert
+  */
   public void setVermoegen(int pV)
   {
       vermoegen = pV;
   }
   
+  /**
+  * Auf die aktuellen Siege wird zugegriffen
+  */
   public int getSiege()
   {
       return durchgangsSiege;
   }
   
+  /**
+  * Die Siege werden unter einem Parameter gespeichert
+  */
   public void setSiege(int pSiege)
   {
       durchgangsSiege = pSiege;

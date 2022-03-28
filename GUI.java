@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -196,6 +197,7 @@ public class GUI extends JFrame implements ActionListener{
      */
     public void SpielzugSpieler1()
     {
+        werIstDran = true;
         newLine();
         addText(spielername1);
         addText(", du bist dran!");
@@ -214,6 +216,7 @@ public class GUI extends JFrame implements ActionListener{
      */
     public void SpielzugSpieler2()
     {
+        werIstDran = false;
         hatGewonnen();
         newLine();
         addText(spielername2);
@@ -268,7 +271,6 @@ public class GUI extends JFrame implements ActionListener{
                     addText("Du hast eine 7 gewürfelt! Dein Punktestand liegt bei " + ergebnisse[2] + ". Dein Zug ist beendet.");
                     werIstDran = false;
                     
-                    spieltopf.leeren();
                     SpielzugSpieler2();
                 }
             }
@@ -288,8 +290,23 @@ public class GUI extends JFrame implements ActionListener{
                     addText("Du hast eine 7 gewürfelt! Dein Punktestand liegt bei " + ergebnisse[2] + ". Dein Zug ist beendet.");
                     werIstDran = true;
                     
-                    spieltopf.leeren();
-                    hatGewonnen();
+                    
+                    if(spieler1.punktestandAngeben() > spieler2.punktestandAngeben())
+                    {
+                        spieler1.topfLeeren();
+                        spieltopf.leeren();
+                        String siegesnachricht = spielername1 + " hat gewonnen! Mit " + spieler1.punktestandAngeben() + " Punkten und einem Vermögen von " + spieler1.getVermoegen() + ". Würfe: " + spieler1.wurfAnzahlAngeben();
+                        JOptionPane.showMessageDialog(sieg,
+                        siegesnachricht,
+                        "Sieg",
+                        JOptionPane.INFORMATION_MESSAGE);
+                        spieler1.resetWurfAnzahl();
+                        spieler2.resetWurfAnzahl();
+                        spieler1.punkteZuruecksetzen();
+                        spieler2.punkteZuruecksetzen();
+                        spieler1.setSiege(spieler1.getSiege() + 1);
+                        SpielzugSpieler1();
+                    }
                 }
             }
         }
@@ -324,6 +341,7 @@ public class GUI extends JFrame implements ActionListener{
         if(spieler2.punktestandAngeben() > spieler1.punktestandAngeben())
         {
             spieler2.topfLeeren();
+            spieltopf.leeren();
             String siegesnachricht = spielername2 + " hat gewonnen! Mit " + spieler2.punktestandAngeben() + " Punkten und einem Vermögen von " + spieler2.getVermoegen() + ". Würfe: " + spieler2.wurfAnzahlAngeben();
             JOptionPane.showMessageDialog(sieg,
             siegesnachricht,
@@ -339,6 +357,7 @@ public class GUI extends JFrame implements ActionListener{
         else if((spieler1.punktestandAngeben() >= spieler2.punktestandAngeben()) && (spieler1.wurfAnzahlAngeben() == spieler2.wurfAnzahlAngeben()))
         {
             spieler1.topfLeeren();
+            spieltopf.leeren();
             String siegesnachricht = spielername1 + " hat gewonnen! Mit " + spieler1.punktestandAngeben() + " Punkten und einem Vermögen von " + spieler1.getVermoegen() + ". Würfe: " + spieler1.wurfAnzahlAngeben();
             JOptionPane.showMessageDialog(sieg,
             siegesnachricht,
@@ -375,4 +394,3 @@ public class GUI extends JFrame implements ActionListener{
       konsole.append("\n");
     }
 }
-

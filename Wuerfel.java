@@ -1,3 +1,4 @@
+
 import java.util.Random;
 /**
  * Beschreiben Sie hier die Klasse Würfel.
